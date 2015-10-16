@@ -46,13 +46,11 @@ angular.module('marinetApp')
                 },
 
                 login: function (user, success, error) {
-                    $http.post(routingConfig.apiUrl + '/login', user).success(function (data) {
-                        console.log(data);
-                        $rootScope.user = data;
+                    $http.post(routingConfig.apiUrl + '/login', user).then(function (response) {
+                        $rootScope.user = response.data;
                         $rootScope.loggedIn = true;
-                        success(data);
-                    })
-                        .error(error);
+                        success(response.data);
+                    }, error);
                 },
 
                 logout: function (success, error) {

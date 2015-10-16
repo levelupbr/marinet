@@ -4,7 +4,6 @@ angular.module('marinetApp')
     .factory('Errors', ['$resource',
         function ($resource) {
             var d = new Date();
-            console.log('criado');
             var errors = $resource(routingConfig.apiUrl + '/:appName/error/:hash', {
                 cacheSlayer: d.getTime()
             }, {
@@ -19,6 +18,10 @@ angular.module('marinetApp')
                     params: {
                         hash: '@hash'
                     }
+                },
+                purge: {
+                    method: 'DELETE',
+                    url: routingConfig.apiUrl + '/:appName/errors'
                 }
             });
             return {
@@ -54,5 +57,10 @@ angular.module('marinetApp')
                         appName: appName
                     }).$promise;
                 },
+                purge: function(appName) {
+                    return errors.purge({
+                        appName: appName
+                    }).$promise;
+                }
             };
     }]);

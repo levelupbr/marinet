@@ -201,3 +201,5 @@ results
  
 node_modules
 npm-debug.log
+/src/app/nbproject
+/src/app/nbproject/private/

@@ -16,11 +16,10 @@ module.exports = function (Models, Q) {
                     });
                     else {
                         let error = errors[errors.length - 1];
-                        error.keys = [];
+                        error.others = [];
                         for (let i = 0; i < errors.length; i++) {
                             let item = errors[i];
-                            console.log(item._id);
-                            error.keys.push(item._id);
+                            error.others.push({ key: item._id, createdAt: item.createdAt});
                         }
                         error.selected = error._id;
                         defered.resolve(error);

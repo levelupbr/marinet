@@ -27,17 +27,22 @@ angular.module('marinetApp')
                 $scope.query = null;
                 $scope.sort = null;
                 $scope.search();
-            }
+            };
 
             $scope.orderAsc = function () {
                 $scope.sort = 'asc';
                 $scope.search();
-            }
+            };
+            
+            $scope.orderDesc = function () {
+                $scope.sort = 'desc';
+                $scope.search();
+            };
 
             $scope.onlySolved = function () {
                 $scope.solved = true;
                 $scope.search();
-            }
+            };
 
             $scope.nextPage = function () {
                 if ($scope.busy || !$scope.canLoad) return;
@@ -65,9 +70,10 @@ angular.module('marinetApp')
                     $scope.busy = false;
                 }, function (err) {
                     console.log(err);
-                    toaster.pop('error', 'Erros', 'Ocorreu uma falha ao listar os erros');
                     $scope.busy = false;
                     $scope.canLoad = false;
+                    if ( err.status !== 403 )
+                        toaster.pop('error', 'Erros', 'Ocorreu uma falha ao listar os erros');
                 });
             };
             $scope.nextPage();

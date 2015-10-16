@@ -35,7 +35,7 @@
                                         <td>Id</td>
                                         <td>Key</td>
                                         <td>Total Errors</td>
-                                        <td style="width: 110px;"></td>
+                                        <td></td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -46,8 +46,8 @@
                                         <td ng-bind="app.errors"></td>
                                         <td class="text-center">
                                             <div class="btn-group">
-                                                <a ng-href="#!/{{user.accountName}}/{{app.name}}/errors" class="btn btn-success">Erros</a>
-
+                                                <a ng-disabled="!app.errors" ng-href="/{{user.accountName}}/{{app.name}}/errors" class="btn btn-success">Erros</a>
+                                                <button class="btn btn-danger" ng-disabled="!app.errors" ng-click="purge(app.name)">Purge</button>
                                             </div>
                                         </td>
                                     </tr>

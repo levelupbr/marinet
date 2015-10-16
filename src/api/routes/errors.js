@@ -18,16 +18,40 @@ function errors(app, queries, commands, authed, publisher) {
             })
             .done();
     });
+    
+    app.get('/:appName/errors/by-hardware-id', function (req, res) {
+        queries.getErrorsByHardwareId.execute(req.params.appName)
+            .then(function (errors) {
+                res.json(errors);
+            }).catch(function (err) {
+                require('../lib/marinet-handler')(err, req, res, function (err) {
+                    res.status(500).json(err);
+                });
+            })
+            .done();
+    });
+    
+    app.delete('/:appName/errors', authed, function (req, res) {
+        commands.purgeErrors.execute(req.params.appName)
+            .then(function () {
+                res.sendStatus(204);
+            }).catch(function (err) {
+                require('../lib/marinet-handler')(err, req, res, function (err) {
+                    res.status(500).json(err);
+                });
+            })
+            .done();
+    });
 
     app.post('/error', function (req, res) {
         let error = req.body;
-
+        
         publisher.send(JSON.stringify({
             type: 'newerror',
             error: error,
             app: {
-                id: req.headers.marinetappid,
-                key: req.headers.marinetappkey
+                id: req.headers["marinet-appid"],
+                key: req.headers["marinet-appkey"]
             },
             date: Date.now()
         }));

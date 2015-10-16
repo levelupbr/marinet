@@ -1,3 +1,5 @@
+/* global exports */
+
 (function (exports) {
     'use strict';
 
@@ -26,6 +28,6 @@
     exports.apiUrl = 'http://localhost:3000';
     exports.roleDisplayName = function (id) {
         return userRolesDisplayName[id];
-    }
+    };
 
 })(typeof exports === 'undefined' ? this['routingConfig'] = {} : exports);

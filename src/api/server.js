@@ -39,6 +39,7 @@ const
         'getUserByLogin': require('./lib/queries/get-user-by-login.js')(Models, Q),
         'getErrorsById': require('./lib/queries/get-errors-by-id.js')(Models, Q),
         'getCommentsByErrorHash': require('./lib/queries/get-comments-by-error-hash.js')(Models, Q),
+        'getErrorsByHardwareId': require('./lib/queries/get-errors-by-hardware-id.js')(Models, Q),
         'searchErrors': require('./lib/queries/search-errors.js')(Models, Q),
     },
     commands = {
@@ -48,6 +49,8 @@ const
         'solveErrors': require('./lib/commands/solve-errors.js')(Models, Q),
         'validatePassword': require('./lib/commands/validate-password.js')(Q),
         'createComment': require('./lib/commands/create-comment.js')(Models, Q),
+        'createUser': require('./lib/commands/create-user.js')(Models, Q),
+        'purgeErrors': require('./lib/commands/purge-errors.js')(Models, Q)
     };
 
 app.use(cors({
@@ -94,19 +97,23 @@ passport.deserializeUser(function (username, done) {
         });
 });
 
+ 
+
+//commands.createUser.execute({ name: 'Admin',  password: '1234', email: 'admin@admin.net', accountName: 'System admin' });
+
 passport.use(new LocalStrategy(
     function (username, password, done) {
         queries.getUserByLogin.execute(username).then(function (user) {
-            if (commands.validatePassword.execute(password, user))
+            if (user && commands.validatePassword.execute(password, user))
                 done(null, user);
             else
-                done(403, false, {
+                done(null, false, {
                     message: 'Incorrect username or password.'
                 });
 
         }).catch(function (err) {
             console.log(err);
-            done(403, false, {
+            done(null, false, {
                 message: 'User not found.'
             });
         });

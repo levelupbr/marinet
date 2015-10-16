@@ -1,3 +1,5 @@
+/* global angular */
+
 'use strict';
 
 angular.module('marinetApp')
@@ -12,8 +14,10 @@ angular.module('marinetApp')
                     $scope.$root.user = user;
                     $location.path(user.accountName + '/dashboard');
                     $scope.$root.$emit('hidemessage', '');
-                }, function () {
-                    toaster.pop('warning', '', 'Usuário e/ou senha inválido');
+                }, function (err) {
+                    if ( err.status === 401)
+                        return toaster.pop('warning', '', 'Usuário e/ou senha inválido');
+                    toaster.pop('error', '', 'Ocorreu um erro no login');
                 });
             };
   }]);

@@ -10,7 +10,7 @@ module.exports = function (mongoose) {
         message: String,
         exception: String,
         currentUser: String,
-        createdAt: Date,
+        createdAt: { type: Date, default: Date.now },
         solved: {
             type: Boolean,
             index: true
@@ -23,8 +23,13 @@ module.exports = function (mongoose) {
             type: String,
             index: true
         },
+        hardwareId: {
+            type: String,
+            index: true
+        },
         selected: String,
-        keys: [String],
+        others: [{}],
+        occurrences: [{}]
     }, {
         strict: false
     });

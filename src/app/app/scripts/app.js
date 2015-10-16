@@ -76,6 +76,8 @@ angular
                 .otherwise({
                     redirectTo: '/login'
                 });
+                
+                $locationProvider.html5Mode(true);
     }])
     .run(['$rootScope', '$location', 'Auth',
         function ($rootScope, $location, Auth) {
