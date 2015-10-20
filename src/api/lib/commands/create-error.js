@@ -21,6 +21,9 @@ module.exports = function (Models, Q) {
                
             let defered = Q.defer();
             let hash = crypto.createHash('md5').update(JSON.stringify(data.message + data.exception + app.name)).digest("hex");
+            
+            if ( ! data.hardwareId )
+                data.hardwareId = 'not_sent';
 
             Models.Error.findOne({hash: hash, hardwareId: data.hardwareId}).exec(function(err, error){
                 

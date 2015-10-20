@@ -11,15 +11,16 @@ angular.module('marinetApp')
 
             $http.get(routingConfig.apiUrl + '/user')
                 .success(function (data) {
-                    console.log(data);
+                    $rootScope.user = data;
                     $rootScope.loggedIn = true;
                     deferred.resolve(data);
                 })
                 .error(function (err) {
-                    console.log(err);
+                    $rootScope.user = {};
                     deferred.resolve({
                         username: '',
-                        role: userRoles.public
+                        role: userRoles.public,
+                        error: err 
                     });
                 });
 
