@@ -6,8 +6,8 @@ const
     parentFile = parent.filename,
     parentDir = Path.dirname(parentFile);
 
-let dir = 'lib/models',
-    files = FS.readdirSync(dir),
+let dir = '/models',
+    files = FS.readdirSync(__dirname + dir),
     map = {};
 
 module.exports = function (mongoose) {
@@ -19,7 +19,7 @@ module.exports = function (mongoose) {
         let file = files[i];
         let ext = Path.extname(file);
         let base = Path.basename(file, ext).capitalize();
-        let path = Path.resolve(dir, file);
+        let path = Path.resolve(__dirname + dir, file);
         map[base] = require(path)(mongoose);
     };
 
