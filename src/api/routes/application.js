@@ -1,6 +1,6 @@
 'use strict';
 
-function application(app, config, commands, authed) {
+function application(app, config, commands) {
     app.get('/setup', function (req, res) {
         commands.initialSetup.execute(config.account.defaultId)
             .then(function (body) {

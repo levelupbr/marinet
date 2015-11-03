@@ -51,7 +51,7 @@
     <toaster-container toaster-options="{'time-out': 5000, 'close-button':true, 'position-class': 'toast-bottom-right'}"></toaster-container>
     <nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/{{user.accountName}}/apps">
+            <a class="navbar-brand" href="{{user.accountName}}/apps">
                 <img class="menu-avatar" src="images/marinet.png" />marinet</a>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-primary">
                 <span class="sr-only">Toggle Side Navigation</span>
@@ -116,7 +116,9 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
-    <script src="scripts/routingConfig.js"></script>
+    <script src="scripts/bootstrap.js"></script>
+    <script src="scripts/constants/authEvents.js"></script>
+    <script src="scripts/constants/routingConfig.js"></script>
     <script src="scripts/vendor/jquery.ibutton/jquery.browser.js"></script>
     <script src="scripts/vendor/jquery.ibutton/jquery.ibutton.js"></script>
     <script src="scripts/app.js"></script>
@@ -141,7 +143,11 @@
     <script src="scripts/services/comments.js"></script>
     <script src="scripts/directives/onenter.js"></script>
     <script src="scripts/controllers/dashboard.js"></script>
+    <script src="scripts/controllers/signup.js"></script>
+    <script src="scripts/controllers/profile.js"></script>
+    <script src="scripts/controllers/settings.js"></script>
     <!-- endbuild -->
 </body>
+
 
 </html>

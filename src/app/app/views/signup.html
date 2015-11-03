@@ -1,0 +1,33 @@
+        <div class="col-md-4 col-md-offset-4">
+            <div class="padded">
+                <div class="login box" style="margin-top: 80px;">
+                    <div class="box-header"><span class="title">Login</span></div>
+                    <div class="box-content padded">
+                        <form name="form" class="separate-sections" ng-submit="register()">
+                            <div class="input-group addon-left">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input name="Name" ng-model="user.accountName" type="text" placeholder="Name" required>
+                            </div>
+                            <div class="input-group addon-left">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input name="Username" ng-model="user.name" type="text" placeholder="username" required>
+                            </div>
+                            <div class="input-group addon-left">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input name="Email" ng-model="user.email" type="email" placeholder="email" required>
+                            </div>
+                            <div class="input-group addon-left">
+                                <span class="input-group-addon"><i class="icon-key"></i></span>
+                                <input name="Password" ng-model="user.password" type="password" placeholder="password" required>
+                            </div>
+                            <div>
+                                <button class="btn btn-blue btn-block" ng-disabled="!form.$valid" btn-loading="{{is_loading}}" type="submit">Create <i class="icon-signin"></i></button>
+                            </div>
+                        </form>
+                        <div>
+                            <a href="/login">Do you have an account? <strong>Login</strong></a>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>

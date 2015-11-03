@@ -1,17 +1,17 @@
 'use strict';
 
 angular.module('marinetApp')
-    .factory('Errors', ['$resource',
-        function ($resource) {
+    .factory('Errors', ['$resource', 'ROUTING_CONFIG',
+        function ($resource, ROUTING_CONFIG) {
             var d = new Date();
-            var errors = $resource(routingConfig.apiUrl + '/:appName/error/:hash', {
+            var errors = $resource(ROUTING_CONFIG.apiUrl + '/:appName/error/:hash', {
                 cacheSlayer: d.getTime()
             }, {
                 'find': {
-                    url: routingConfig.apiUrl + '/:appName/errors'
+                    url: ROUTING_CONFIG.apiUrl + '/:appName/errors'
                 },
                 'findOne': {
-                    url: routingConfig.apiUrl + '/error/:hash/:id'
+                    url: ROUTING_CONFIG.apiUrl + '/error/:hash/:id'
                 },
                 'solve': {
                     method: 'PUT',
@@ -21,7 +21,7 @@ angular.module('marinetApp')
                 },
                 purge: {
                     method: 'DELETE',
-                    url: routingConfig.apiUrl + '/:appName/errors'
+                    url: ROUTING_CONFIG.apiUrl + '/:appName/errors'
                 }
             });
             return {

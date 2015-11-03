@@ -3,16 +3,17 @@
 'use strict';
 
 angular.module('marinetApp')
-    .controller('LoginCtrl', ['$scope', '$location', 'Auth', 'toaster',
-        function ($scope, $location, Auth, toaster) {
+    .controller('LoginCtrl', ['$scope', 'Auth', 'toaster',
+        function ($scope, Auth, toaster) {
+            
+            Auth.isLoggedIn();
+            
             $scope.user = {
                 username: '',
                 password: ''
             };
             $scope.login = function () {
-                Auth.login($scope.user, function (user) {
-                    $scope.$root.user = user;
-                    $location.path(user.accountName + '/dashboard');
+                Auth.login($scope.user, function () {
                     $scope.$root.$emit('hidemessage', '');
                 }, function (err) {
                     if ( err.status === 401)

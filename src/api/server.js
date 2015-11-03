@@ -60,12 +60,59 @@ app.use(bodyParser.json());
 app.use(logger('combined'));
 app.set('port', process.env.PORT || 3000);
 
+
+const auth = {
+
+    secure: function(req, res, next) {
+        
+        if (req.isAuthenticated()) {
+            return next();
+        } else if (redisClient.ready || 'production' !== environment) {
+            res.status(401).json({
+                error: "unauthorized",
+                reason: "not_authenticated"
+            });
+        } else {
+            res.status(503).json({
+                error: "service_unavailable",
+                reason: "authentication_unavailable"
+            });
+        }
+    },
+    hasAccess: function(role) {
+    
+        var roles = {
+            user: 2, // 010
+            admin: 4 // 100
+        };
+        
+        var accessLevels = {
+            user: roles.user | roles.admin,
+            admin: roles.admin
+        }
+    
+        return function (req, res, next)
+        {
+            if ( roles[req.user.roles[0]] & roles[role] )
+                return next();
+                
+            res.status(403).json({
+                error: "unauthorized",
+                reason: "access_denied"
+            });
+        };
+    }
+
+};
+
+
 const authed = function (req, res, next) {
+
     if (req.isAuthenticated()) {
         return next();
     } else if (redisClient.ready || 'production' !== environment) {
-        res.status(403).json({
-            error: "forbidden",
+        res.status(401).json({
+            error: "unauthorized",
             reason: "not_authenticated"
         });
     } else {
@@ -96,10 +143,6 @@ passport.deserializeUser(function (username, done) {
             done(err, null);
         });
 });
-
- 
-
-//commands.createUser.execute({ name: 'Admin',  password: '1234', email: 'admin@admin.net', accountName: 'System admin' });
 
 passport.use(new LocalStrategy(
     function (username, password, done) {
@@ -132,11 +175,14 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(['/logout', '/user/me', '/account/app*','/*/errors$', '/error/(!throw)*','/comments/*'], auth.secure);
+app.use(['/account/app'], auth.hasAccess('admin'));
+
 const
-    errors = require('./routes/errors.js')(app, queries, commands, authed, publisher),
-    account = require('./routes/account.js')(app, config, queries, commands, authed, passport),
-    application = require('./routes/application.js')(app, config, commands, authed),
-    comments = require('./routes/comments.js')(app, queries, commands, authed);
+    errors = require('./routes/errors.js')(app, queries, commands, publisher),
+    account = require('./routes/account.js')(app, config, queries, commands, passport),
+    application = require('./routes/application.js')(app, config, commands),
+    comments = require('./routes/comments.js')(app, queries, commands);
 
 app.get('/', function (req, res) {
     res.json('I\'m working...');

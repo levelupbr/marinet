@@ -27,6 +27,7 @@ module.exports = function (Models, Q) {
                             $project: {
                                 accountId: '$accountId',
                                 appName: '$appName',
+                                hash: '$hash',
                                 open: {
 
                                     $cond: {
@@ -41,7 +42,8 @@ module.exports = function (Models, Q) {
                             $group: {
                                 _id: {
                                     accountId: '$accountId',
-                                    appName: '$appName'
+                                    appName: '$appName',
+                                    hash: '$hash'
                                 },
                                 count: {
                                     $sum: 1

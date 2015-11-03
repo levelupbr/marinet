@@ -38,7 +38,8 @@ module.exports = function (mongoose) {
     schema.plugin(textSearch);
     schema.index({
         message: "text",
-        exception: "text"
+        exception: "text",
+        hardwareId: "text"
     });
 
     return mongoose.model('Error', schema);

@@ -1,7 +1,7 @@
 'use strict';
 
-function account(app, config, queries, commands, authed, passport) {
-    app.get('/account/apps', authed, function (req, res) {
+function account(app, config, queries, commands, passport) {
+    app.get('/account/apps', function (req, res) {
         queries.getAccountApps.execute(req.user.accountId)
             .then(function (apps) {
                 res.json(apps);
@@ -13,7 +13,7 @@ function account(app, config, queries, commands, authed, passport) {
             });
     });
 
-    app.post('/account/app', authed, function (req, res) {
+    app.post('/account/app', function (req, res) {
         let
             app = req.body,
             accountId = req.user.accountId;
@@ -40,25 +40,45 @@ function account(app, config, queries, commands, authed, passport) {
             });
         });
 
-    app.delete('/logout', authed, function (req, res) {
+    app.delete('/logout', function (req, res) {
         req.logout();
         res.status(204).json({
             message: 'OK'
         });
     });
 
-    app.get('/user', authed, function (req, res) {
-        if (req.user)
-            res.json({
-                'username': req.user.name,
-                'role': req.user.roles[0],
-                'accountName': req.user.accountName,
-                'email': req.user.email,
-            });
-        else
-            res.status(403).json({
-                error: "forbidden",
-                reason: "not_authenticated"
+    app.get('/user/me', function (req, res) {
+        res.json({
+            'username': req.user.name,
+            'role': req.user.roles[0],
+            'accountName': req.user.accountName,
+            'email': req.user.email,
+        });
+    });
+    
+    app.post('/user', function (req, res) {
+
+        let user = req.body;
+        
+        let message = function(msg) {
+        
+            if ( msg.indexOf('$name') !== -1 )
+                return 'duplicated username';
+                
+            if ( msg.indexOf('$email') !== -1 )
+                return 'duplicated email';
+                
+            return msg;
+        }
+
+        commands.createUser.execute(user)
+            .then(function (user) {
+                res.status(201).json(user);
+            }).catch(function (err) {
+                res.status(503).json({
+                    error: "error",
+                    reason: message(err.message)
+                });
             });
     });
 }

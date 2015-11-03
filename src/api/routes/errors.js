@@ -1,7 +1,8 @@
 'use strict';
 
-function errors(app, queries, commands, authed, publisher) {
-    app.get('/:appName/errors', authed, function (req, res) {
+function errors(app, queries, commands, publisher) {
+
+    app.get('/:appName/errors', function (req, res) {
         queries.searchErrors
             .execute({
                 query: req.query.q,
@@ -11,6 +12,18 @@ function errors(app, queries, commands, authed, publisher) {
             }, req.query.page)
             .then(function (errors) {
                 res.json(errors);
+            }).catch(function (err) {
+                require('../lib/marinet-handler')(err, req, res, function (err) {
+                    res.status(500).json(err);
+                });
+            })
+            .done();
+    });
+    
+    app.delete('/:appName/errors', function (req, res) {
+        commands.purgeErrors.execute(req.params.appName)
+            .then(function () {
+                res.sendStatus(204);
             }).catch(function (err) {
                 require('../lib/marinet-handler')(err, req, res, function (err) {
                     res.status(500).json(err);
@@ -31,18 +44,7 @@ function errors(app, queries, commands, authed, publisher) {
             .done();
     });
     
-    app.delete('/:appName/errors', authed, function (req, res) {
-        commands.purgeErrors.execute(req.params.appName)
-            .then(function () {
-                res.sendStatus(204);
-            }).catch(function (err) {
-                require('../lib/marinet-handler')(err, req, res, function (err) {
-                    res.status(500).json(err);
-                });
-            })
-            .done();
-    });
-
+    
     app.post('/error', function (req, res) {
         let error = req.body;
         
@@ -62,7 +64,8 @@ function errors(app, queries, commands, authed, publisher) {
 
     });
 
-    app.get('/:appName/error/:hash', authed, function (req, res) {
+    
+    app.get('/:appName/error/:hash', function (req, res) {
 
         queries.getErrorsByHash
             .execute(req.params.appName, req.params.hash)
@@ -85,7 +88,7 @@ function errors(app, queries, commands, authed, publisher) {
             }).done();
     });
 
-    app.get('/error/:hash/:id', authed, function (req, res) {
+    app.get('/error/:hash/:id', function (req, res) {
 
         queries.getErrorsById
             .execute(req.params.id)
@@ -96,7 +99,7 @@ function errors(app, queries, commands, authed, publisher) {
             }).done();
     });
 
-    app.put('/error/:hash', authed, function (req, res) {
+    app.put('/error/:hash', function (req, res) {
         commands.solveErrors
             .execute(req.params.hash)
             .then(function (result) {
@@ -109,7 +112,6 @@ function errors(app, queries, commands, authed, publisher) {
 
     app.get('/error/throw', function (req, res) {
         throw new Error("Error test! Try to catch this!");
-
     });
 }
 

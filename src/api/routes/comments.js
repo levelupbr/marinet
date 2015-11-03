@@ -1,7 +1,7 @@
 'use strict';
 
-function comments(app, queries, commands, authed) {
-    app.get('/comments/:hash', authed, function (req, res) {
+function comments(app, queries, commands) {
+    app.get('/comments/:hash', function (req, res) {
         queries.getCommentsByErrorHash
             .execute(req.params.hash)
             .then(function (comments) {

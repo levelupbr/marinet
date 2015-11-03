@@ -1,18 +1,25 @@
+/* global angular */
+
 'use strict';
 
 angular.module('marinetApp')
-    .service('Auth', ['$http', '$rootScope', '$cookieStore', '$q',
-        function ($http, $rootScope, $cookieStore, $q) {
+    .service('Auth', ['$http', '$rootScope',  '$q', 'AUTH_EVENTS', 'ROUTING_CONFIG',
+        function ($http, $rootScope, $q, AUTH_EVENTS, ROUTING_CONFIG) {
 
-            var accessLevels = routingConfig.accessLevels,
-                userRoles = routingConfig.userRoles;
+            var accessLevels = ROUTING_CONFIG.accessLevels,
+                userRoles = ROUTING_CONFIG.userRoles;
 
             var deferred = $q.defer();
+            
+            var onLoginSuccess = function(user) {
+                $rootScope.user = user;
+                $rootScope.loggedIn = true;
+                $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+            };
 
-            $http.get(routingConfig.apiUrl + '/user')
+            $http.get(ROUTING_CONFIG.apiUrl + '/user/me')
                 .success(function (data) {
-                    $rootScope.user = data;
-                    $rootScope.loggedIn = true;
+                    onLoginSuccess(data);
                     deferred.resolve(data);
                 })
                 .error(function (err) {
@@ -32,37 +39,49 @@ angular.module('marinetApp')
 
             return {
                 authorize: function (accessLevel, role) {
-                    console.log($rootScope.user);
                     if (role === undefined)
-                        role = $rootScope.user.role;
-                    return accessLevel & role;
+                        role = userRoles[$rootScope.user.role];
+                    return !!(accessLevel & role);
                 },
 
-                isLoggedIn: function (user) {
-                    return $rootScope.user.role === userRoles.user || $rootScope.user.role === userRoles.admin;
+                isLoggedIn: function () {
+                    var isLoggedIn = userRoles[$rootScope.user.role] === userRoles.user || userRoles[$rootScope.user.role] === userRoles.admin;
+                    
+                    if ( isLoggedIn )
+                        $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                    
+                    return isLoggedIn;
                 },
 
                 register: function (user, success, error) {
-                    $http.post(routingConfig.apiUrl + '/register', user).success(success).error(error);
+                    $http.post(ROUTING_CONFIG.apiUrl + '/user', user).success(success).error(error);
                 },
 
                 login: function (user, success, error) {
-                    $http.post(routingConfig.apiUrl + '/login', user).then(function (response) {
-                        $rootScope.user = response.data;
-                        $rootScope.loggedIn = true;
-                        success(response.data);
+                    $http.post(ROUTING_CONFIG.apiUrl + '/login', user).then(function (response) {
+                        onLoginSuccess(response.data);
+                        
+                        if ( angular.isFunction(success))
+                            success(response.data);
                     }, error);
                 },
 
                 logout: function (success, error) {
-                    $http.delete(routingConfig.apiUrl + '/logout').success(function () {
-                        $rootScope.user = {
-                            username: '',
-                            role: userRoles.public
-                        };
-                        $rootScope.loggedIn = false;
+                    
+                    var self = this;
+                    
+                    $http.delete(ROUTING_CONFIG.apiUrl + '/logout').success(function () {
+                        self.sessionDestroyer();
                         success();
                     }).error(error);
+                },
+                
+                sessionDestroyer: function() {
+                    $rootScope.user = {
+                        username: '',
+                        role: userRoles.public
+                    };
+                    $rootScope.loggedIn = false;
                 },
 
                 accessLevels: accessLevels,

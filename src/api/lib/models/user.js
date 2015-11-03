@@ -9,9 +9,9 @@ module.exports = function (mongoose) {
 
 
     let schema = mongoose.Schema({
-        name: String,
+        name: { type: String, unique: true },
         password: String,
-        email: String,
+        email: { type: String, unique: true },
         accountId: String,
         accountName: String,
         roles: [String],

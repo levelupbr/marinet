@@ -10,7 +10,7 @@ module.exports = function (Models, Q) {
 
                 function (next) {
                     let account = new Models.Account({
-                        name: 'marinet',
+                        name: 'System',
                         status: 1
                     });
 
@@ -19,12 +19,12 @@ module.exports = function (Models, Q) {
                 function (account, rows, next) {
 
                     let admin = new Models.User({
-                        name: 'Administrator',
+                        name: 'admin',
                         email: 'admin@marinet.me',
-                        password: 'b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1b5e07394c706a8bb980b1d7785e5976ec049b46df5f1326af5a2ea6d103fd07c95385ffab0cacbc86',
+                        password: '06b2e4ac9354ffed62f0fdbbc18d9799d447141877750cd8551721ec8632784e5f2a15ca37c4f1bc1b3647daddbea12cdf6a5eab73aa3e14c9164b3e9a9cedc9',
                     });
                     account.addUser(admin);
-                    admin.addRole("Administrator");
+                    admin.addRole("admin");
                     admin.save(function (err) {
                         if (err) next(err);
                         next(null, account);

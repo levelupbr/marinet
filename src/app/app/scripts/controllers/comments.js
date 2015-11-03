@@ -8,14 +8,14 @@
  * Controller of the marinetApp
  */
 angular.module('marinetApp')
-    .controller('CommentsCtrl', ['$scope', 'Comments', 'toaster',
-        function ($scope, Comments, toaster) {
+    .controller('CommentsCtrl', ['$scope', 'Comments', 'toaster', 'ROUTING_CONFIG',
+        function ($scope, Comments, toaster, ROUTING_CONFIG) {
             $scope.comments = Comments.query($scope.hash);
             $scope.lastMessageTime = '';
             $scope.message = '';
 
             $scope.displayRole = function (role) {
-                return routingConfig.roleDisplayName(role);
+                return ROUTING_CONFIG.roleDisplayName(role);
             };
             $scope.send = function () {
                 Comments.comment({
