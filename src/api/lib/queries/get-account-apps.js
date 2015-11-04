@@ -71,8 +71,8 @@ module.exports = function (Models, Q) {
                                 for (let i = 0; i < result.length; i++) {
                                     for (let j = 0; j < values.length; j++) {
                                         if (values[j].name === result[i]._id.appName) {
-                                            values[j].errors = result[i].count;
-                                            values[j].openErrors = result[i].open;
+                                            values[j].errors += result[i].count;
+                                            values[j].openErrors += result[i].open;
                                         }
                                     }
                                 }
