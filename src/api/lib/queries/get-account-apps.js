@@ -64,18 +64,27 @@ module.exports = function (Models, Q) {
                                         id: apps[i]._id,
                                         key: apps[i].key,
                                         errors: 0,
-                                        openErrors: 0,
+                                        openErrors: 0
                                     });
                                 }
-
-                                for (let i = 0; i < result.length; i++) {
-                                    for (let j = 0; j < values.length; j++) {
-                                        if (values[j].name === result[i]._id.appName) {
-                                            values[j].errors += result[i].count;
-                                            values[j].openErrors += result[i].open;
-                                        }
-                                    }
-                                }
+								
+								var hashes = [];
+								
+								values.forEach(
+									function(value){
+										result.forEach(
+											function(element){
+												if (element._id.appName === value.name){
+													if (hashes.indexOf(element._id.hash) === -1){
+														hashes.push(element._id.hash);
+														value.errors++;
+														value.openErrors += element.open;
+													}
+												}
+											}
+										);
+									}
+								);
 
                                 defered.resolve(values);
                             }
