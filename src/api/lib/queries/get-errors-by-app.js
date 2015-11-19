@@ -23,9 +23,6 @@ module.exports = function (Models, Q) {
                         _id: {
                             appName: "$appName",
                             hash: "$hash"
-                        },
-                        count: {
-                            $sum: 1
                         }
                     }
                 }
@@ -34,12 +31,8 @@ module.exports = function (Models, Q) {
             query.exec(function (err, errors) {
                 if (err) return defered.reject(err);
                 
-                let count = errors.reduce(function(previousValue, error) {
-                    return previousValue + error.count;
-                }, 0);
-                
                 defered.resolve({
-                    count: count
+                    count: errors.length
                 })
             });
 
