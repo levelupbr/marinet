@@ -45,7 +45,7 @@ function errors(app, queries, commands, publisher) {
     });
     
     
-        app.get('/:appName/errors/count', function (req, res) {
+    app.get('/:appName/errors/count', function (req, res) {
         queries.getErrorsByApp.execute(req.params.appName)
             .then(function (errors) {
                 res.json(errors);

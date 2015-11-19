@@ -22,7 +22,6 @@ module.exports = function (Models, Q) {
                     $group: {
                         _id: {
                             appName: "$appName",
-                            hardwareId: "$hardwareId",
                             hash: "$hash"
                         },
                         count: {
