@@ -40,6 +40,7 @@ const
         'getErrorsById': require('./lib/queries/get-errors-by-id.js')(Models, Q),
         'getCommentsByErrorHash': require('./lib/queries/get-comments-by-error-hash.js')(Models, Q),
         'getErrorsByHardwareId': require('./lib/queries/get-errors-by-hardware-id.js')(Models, Q),
+        'getErrorsByApp': require('./lib/queries/get-errors-by-app.js')(Models, Q),
         'searchErrors': require('./lib/queries/search-errors.js')(Models, Q),
     },
     commands = {

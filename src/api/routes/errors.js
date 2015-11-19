@@ -45,6 +45,18 @@ function errors(app, queries, commands, publisher) {
     });
     
     
+        app.get('/:appName/errors/count', function (req, res) {
+        queries.getErrorsByApp.execute(req.params.appName)
+            .then(function (errors) {
+                res.json(errors);
+            }).catch(function (err) {
+                require('../lib/marinet-handler')(err, req, res, function (err) {
+                    res.status(500).json(err);
+                });
+            })
+            .done();
+    });
+    
     app.post('/error', function (req, res) {
         let error = req.body;
         
