@@ -6,7 +6,7 @@ module.exports = function (Models, Q) {
             let defered = Q.defer();
             Models.App.find()
                 .where('accountId')
-                .equals(accountId)
+                .equals(accountId)				
                 .exec(function (err, apps) {
                     if (err) defered.reject(err);
                     if (apps) {
@@ -43,14 +43,12 @@ module.exports = function (Models, Q) {
                                 _id: {
                                     accountId: '$accountId',
                                     appName: '$appName',
-                                    hash: '$hash'
+                                    hash: '$hash',
+									open: '$open'
                                 },
                                 count: {
                                     $sum: 1
-                                },
-                                open: {
-                                    $sum: '$open'
-                                }
+                                }                                
                             }
                             }]).exec(function (err, result) {
                             if (err) defered.reject(err);
@@ -78,7 +76,7 @@ module.exports = function (Models, Q) {
 													if (hashes.indexOf(element._id.hash) === -1){
 														hashes.push(element._id.hash);
 														value.errors++;
-														value.openErrors += element.open;
+														value.openErrors += element._id.open;
 													}
 												}
 											}
