@@ -8,7 +8,10 @@ module.exports = function (Models, Q) {
             Models.Error.update({
                 hash: hash
             }, {
-                solved: true
+                solved: true,
+				$inc: {
+					solveAttempts: 1
+				}
             }, {
                 multi: true
             }).exec(function (err, numberAffected, raw) {

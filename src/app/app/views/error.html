@@ -47,8 +47,11 @@
                 <tbody>
                     <tr ng-repeat="(key, value) in error " ng-if="canShow(key)">
                         <td width="20%">{{key}}</td>
+                        <td width="80%">{{parseErrorValue(value)}}</td>
+                        <!--
                         <td ng-if="value.length <= 200" width="80%">{{displayVal(value)}}</td>
                         <td ng-if="value.length > 200" width="80%"><pre>{{value}}</pre></td>
+                        -->
                     </tr>
                     <tr>
                         <td width="20%">occurrences ({{error.occurrences.length}})</td>

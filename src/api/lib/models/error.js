@@ -27,6 +27,11 @@ module.exports = function (mongoose) {
             type: String,
             index: true
         },
+		solveAttempts: {
+			type: Number,
+			default: 0,
+			index: true
+		},
         selected: String,
         others: [{}],
         occurrences: [{}]
