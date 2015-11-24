@@ -8,7 +8,4 @@
  * Controller of the marinetApp
  */
 angular.module('marinetApp')
-    .controller('DashboardCtrl', ['$scope', 'Apps',
-        function ($scope, Apps) {
-            $scope.$root.apps = Apps.find();
-  }]);
+    .controller('DashboardCtrl', [function () {}]);

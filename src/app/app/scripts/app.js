@@ -84,31 +84,50 @@
             $locationProvider.html5Mode(true);
     };
 
-    var runner = function($rootScope, $location, $routeParams, toaster, Auth, AUTH_EVENTS, ROUTING_CONFIG) {
+    var runner = function($rootScope, $location, toaster, Auth, Apps, AUTH_EVENTS, ROUTING_CONFIG) {
+        
+        $rootScope.apps = Apps.find();
+        
+        var goToRequestedRoute = function()
+        {
+            if ( $location.path().indexOf('/login') === 0 ) return;
+            var r = encodeURIComponent($location.path());
+            return $location.path('/login').search({r: r});
+        };
+        
+        var getDefaultRoute = function()
+        {
+            return $rootScope.user.accountName + '/dashboard';
+        };
         
         var accessLevels = ROUTING_CONFIG.accessLevels;
         
         $rootScope.$on(AUTH_EVENTS.loginSuccess, function() {
-            var path = angular.isDefined($routeParams.r) && $routeParams.r !== '/' ? $routeParams.r : $rootScope.user.accountName + '/dashboard';
-            $location.path(path);
+            var r = $location.search().r;
+            var path = angular.isDefined(r) && r !== '%2F' ? decodeURIComponent(r) : getDefaultRoute();
+            $location.path(path).search({});
         });
         
         $rootScope.$on(AUTH_EVENTS.notAuthenticated, function(){
             Auth.sessionDestroyer();
             if ( $location.path() === "/login" ) return;
-            $location.path('/login' + encodeURIComponent($location.path()));
+            goToRequestedRoute();
         });
         
         $rootScope.$on(AUTH_EVENTS.notAuthorized, function(){
             toaster.pop('error', '', 'Você não tem acesso suficiente');
         });
         
-        $rootScope.$on("$routeChangeStart", function(event, next){
-        
+        $rootScope.$on("$routeChangeStart", function(event, next) {
+            
             var accessLevel = angular.isDefined(next.$$route) ? next.$$route.access : accessLevels.anon;
-            if (accessLevels.anon !== accessLevel && ! Auth.authorize(accessLevel) )
-                $rootScope.$evalAsync(function () { 
-                    $location.path('/' + $rootScope.user.accountName + '/dashboard');
+           
+            if ( ! $rootScope.loggedIn && accessLevels.anon !== accessLevel )
+                goToRequestedRoute();
+            
+            if ( $rootScope.loggedIn && ! Auth.authorize(accessLevel) )
+                return $rootScope.$evalAsync(function () { 
+                    $location.path(getDefaultRoute());
                     $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
                 });
         });
@@ -117,6 +136,6 @@
     angular
         .module('marinetApp')
         .config(['$routeProvider', '$httpProvider', '$locationProvider', 'ROUTING_CONFIG', appConfig])
-        .run(['$rootScope', '$location', '$routeParams', 'toaster', 'Auth', 'AUTH_EVENTS', 'ROUTING_CONFIG', runner]);
+        .run(['$rootScope', '$location', 'toaster', 'Auth', 'Apps', 'AUTH_EVENTS', 'ROUTING_CONFIG', runner]);
 
 })();

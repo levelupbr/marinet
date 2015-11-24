@@ -161,3 +161,9 @@ a.text-success:focus {
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 0px;
 }
+
+
+ul.pagination {
+    height: 100px;
+    overflow-x: auto;
+}

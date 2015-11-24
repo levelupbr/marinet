@@ -45,6 +45,10 @@ angular.module('marinetApp')
                 },
 
                 isLoggedIn: function () {
+                    
+                    if ( $rootScope.loggedIn )
+                        return true;
+                    
                     var isLoggedIn = userRoles[$rootScope.user.role] === userRoles.user || userRoles[$rootScope.user.role] === userRoles.admin;
                     
                     if ( isLoggedIn )
