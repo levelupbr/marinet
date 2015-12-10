@@ -5,6 +5,7 @@ module.exports = function (mongoose) {
         key: String,
         name: String,
         accountId: String,
+        allowed: Array
     });
 
     return mongoose.model('App', schema);

@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <div class="area-top clearfix">
+            <div class="pull-left header">
+                <h3 class="title"><i class="icon-cogs"></i>Aplicações</h3>
+                <h5><span>Gerenciador de aplicações</span></h5>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container padded">
+    <div class="row">
+        <div id="breadcrumbs">
+            <div class="breadcrumb-button">
+                <span class="breadcrumb-label"><i class="icon-cogs"></i> Aplicações</span>
+                <span class="breadcrumb-arrow"><span></span></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container padded">
+    <div class="row">
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary" ng-repeat="app in applications" ng-click="setApplication(app)">
+                <input type="radio">{{app.name}}
+            </label>
+        </div>
+    </div>    
+    <hr>
+    <h3>{{selectedApp.name}}</h3>
+    <ul class="list-group">
+        <li class="list-group-item" ng-repeat="user in users" ng-style="{'background-color': ($index % 2 ? '#ffffff' : '#a6e1ec')}">
+            <div class="row">
+                <h5 class="col-sm-10">{{user.name}}</h5>
+                <toggle-switch ng-model="user.application.allowed"></toggle-switch>               
+            </div>
+        </li>
+    </ul>
+</div>

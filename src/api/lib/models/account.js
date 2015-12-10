@@ -3,9 +3,9 @@
 module.exports = function (mongoose) {
     let schema = mongoose.Schema({
         name: String,
-        status: Number
+        status: { type: Number, "default": 1}
     });
-
+    
     schema.methods.addUser = function (user) {
         user.accountId = this.id;
         user.accountName = this.name;

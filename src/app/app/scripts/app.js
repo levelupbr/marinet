@@ -33,10 +33,15 @@
                 controller: 'AppsCtrl',
                 access: access.user
             })
+            .when('/:account/apps/entitle', {
+                templateUrl: 'views/app.html',
+                controller: 'AppCtrl',
+                access: access.user
+            })
             .when('/:account/newapp', {
                 templateUrl: 'views/newapp.html',
                 controller: 'NewappCtrl',
-                access: access.admin
+                access: access.user
             })
             .when('/:account/:appName/errors', {
                 templateUrl: 'views/errors.html',

@@ -14,7 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/app/images/favicon.ico" type="image/x-icon" />
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(./) styles/vendor.css -->
     <!-- bower:css -->
@@ -26,6 +26,7 @@
     <!-- build:css({.tmp,app}) styles/main.css -->
     <link type="text/css" rel="stylesheet" media="screen" href="styles/application.css">
     <link type="text/css" rel="stylesheet" media="screen" href="styles/style.css">
+    <link type="text/css" rel="stylesheet" media="screen" href="bower_components/angular-bootstrap-toggle-switch/style/bootstrap2/angular-toggle-switch-bootstrap-2.css">
     <!-- endbuild -->
 
     <style>
@@ -113,6 +114,7 @@
     <script src="bower_components/angularjs-toaster/toaster.js"></script>
     <script src="bower_components/angular-gravatar/build/md5.js"></script>
     <script src="bower_components/angular-gravatar/build/angular-gravatar.js"></script>
+    <script src="bower_components/angular-bootstrap-toggle-switch/angular-toggle-switch.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -125,9 +127,11 @@
     <script src="scripts/services/apps.js"></script>
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/controllers/apps.js"></script>
+    <script src="scripts/controllers/app.js"></script>
     <script src="scripts/controllers/errors.js"></script>
     <script src="scripts/controllers/error.js"></script>
     <script src="scripts/controllers/newapp.js"></script>
+    
     <script src="scripts/controllers/message.js"></script>
     <script src="scripts/filters/truncate.js"></script>
     <script src="scripts/filters/normalizedate.js"></script>

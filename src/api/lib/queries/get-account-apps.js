@@ -4,9 +4,21 @@ module.exports = function (Models, Q) {
     return {
         'execute': function (accountId) {
             let defered = Q.defer();
-            Models.App.find()
-                .where('accountId')
-                .equals(accountId)				
+
+            var criteria = {				
+                $or: [
+                    {
+                        accountId: accountId
+                    },
+                    {
+                        allowed: {
+                                $in: [accountId]
+                        }
+                    }
+                ]
+            };
+
+            Models.App.find(criteria)			
                 .exec(function (err, apps) {
                     if (err) defered.reject(err);
                     if (apps) {
@@ -44,7 +56,7 @@ module.exports = function (Models, Q) {
                                     accountId: '$accountId',
                                     appName: '$appName',
                                     hash: '$hash',
-									open: '$open'
+                                    open: '$open'
                                 },
                                 count: {
                                     $sum: 1
@@ -65,24 +77,24 @@ module.exports = function (Models, Q) {
                                         openErrors: 0
                                     });
                                 }
-								
-								var hashes = [];
-								
-								values.forEach(
-									function(value){
-										result.forEach(
-											function(element){
-												if (element._id.appName === value.name){
-													if (hashes.indexOf(element._id.hash) === -1){
-														hashes.push(element._id.hash);
-														value.errors++;
-														value.openErrors += element._id.open;
-													}
-												}
-											}
-										);
-									}
-								);
+
+                                var hashes = [];
+
+                                values.forEach(
+                                        function(value){
+                                                result.forEach(
+                                                        function(element){
+                                                                if (element._id.appName === value.name){
+                                                                        if (hashes.indexOf(element._id.hash) === -1){
+                                                                                hashes.push(element._id.hash);
+                                                                                value.errors++;
+                                                                                value.openErrors += element._id.open;
+                                                                        }
+                                                                }
+                                                        }
+                                                );
+                                        }
+                                );
 
                                 defered.resolve(values);
                             }

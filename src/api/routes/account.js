@@ -28,6 +28,22 @@ function account(app, config, queries, commands, passport) {
                 });
             });
     });
+    
+    app.put('/account/app', function (req, res) {
+        let
+            app = req.body,
+            accountId = req.user.accountId;
+
+        commands.updateApp.allowedUsers(accountId, app)
+            .then(function (app) {
+                res.status(201).json(app);
+            }).catch(function (err) {
+                res.status(503).json({
+                    error: "bad_gateway",
+                    reason: err.message
+                });
+            });
+    });
 
     app.post('/login',
         passport.authenticate('local'),
@@ -69,18 +85,41 @@ function account(app, config, queries, commands, passport) {
                 return 'duplicated email';
                 
             return msg;
-        }
-
-        commands.createUser.execute(user)
-            .then(function (user) {
-                res.status(201).json(user);
-            }).catch(function (err) {
-                res.status(503).json({
-                    error: "error",
-                    reason: message(err.message)
-                });
-            });
-    });
+        };
+        
+        let error = function (err) {
+                res.status(503).json(
+                    {
+                        error: "error",
+                        reason: message(err.message)
+                    }
+                );
+            };
+        
+        let namesAux = {
+            account: user.accountName,
+            user: user.name
+        };
+        
+        user.name = namesAux.account;
+        
+        commands.createAccount.execute(user)
+                .then(function(account){
+                    user.accountId = account._id;
+                    user.name = namesAux.user;
+                    commands.createUser.execute(user)
+                    .then(
+                        function (user) {
+                            res.status(201).json(user);
+                        }
+                    ).catch(
+                        function(err){
+                            commands.createAccount.remove(account).then(error).catch(error);
+                        }
+                    );
+                }).catch(error);
+       });
+       
 }
-
+    
 module.exports = account;

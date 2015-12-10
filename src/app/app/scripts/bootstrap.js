@@ -12,7 +12,8 @@
             'angularMoment',
             'infinite-scroll',
             'toaster',
-            'ui.gravatar'
+            'ui.gravatar',
+            'toggle-switch'
       ]);
           
 })();

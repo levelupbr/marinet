@@ -42,6 +42,7 @@ const
         'getErrorsByHardwareId': require('./lib/queries/get-errors-by-hardware-id.js')(Models, Q),
         'getErrorsByApp': require('./lib/queries/get-errors-by-app.js')(Models, Q),
         'searchErrors': require('./lib/queries/search-errors.js')(Models, Q),
+        'getUsers': require('./lib/queries/get-users.js')(Models, Q)
     },
     commands = {
         'createError': require('./lib/commands/create-error.js')(Models, Q),
@@ -51,7 +52,9 @@ const
         'validatePassword': require('./lib/commands/validate-password.js')(Q),
         'createComment': require('./lib/commands/create-comment.js')(Models, Q),
         'createUser': require('./lib/commands/create-user.js')(Models, Q),
-        'purgeErrors': require('./lib/commands/purge-errors.js')(Models, Q)
+        'purgeErrors': require('./lib/commands/purge-errors.js')(Models, Q),
+        'createAccount': require('./lib/commands/create-account.js')(Models, Q),
+        'updateApp': require('./lib/commands/update-app.js')(Models, Q)
     };
 
 app.use(cors({
@@ -176,14 +179,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(['/logout', '/user/me', '/account/app*','/*/errors$', '/error/(!throw)*','/comments/*'], auth.secure);
+app.use(['/logout', '/user/me', '/account/app*','/*/errors$', '/error/(!throw)*','/comments/*','/users'], auth.secure);
 app.use(['/account/app'], auth.hasAccess('admin'));
 
 const
     errors = require('./routes/errors.js')(app, queries, commands, publisher),
     account = require('./routes/account.js')(app, config, queries, commands, passport),
     application = require('./routes/application.js')(app, config, commands),
-    comments = require('./routes/comments.js')(app, queries, commands);
+    comments = require('./routes/comments.js')(app, queries, commands),
+    users = require('./routes/users.js')(app, queries);
 
 app.get('/', function (req, res) {
     res.json('I\'m working...');
