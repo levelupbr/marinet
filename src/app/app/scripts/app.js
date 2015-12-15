@@ -33,7 +33,7 @@
                 controller: 'AppsCtrl',
                 access: access.user
             })
-            .when('/:account/apps/entitle', {
+            .when('/:account/apps/permissions', {
                 templateUrl: 'views/app.html',
                 controller: 'AppCtrl',
                 access: access.user

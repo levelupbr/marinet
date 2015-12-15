@@ -14,6 +14,10 @@ angular.module('marinetApp')
                 save: {
                     method: 'POST',
                     url: ROUTING_CONFIG.apiUrl + '/account/app'
+                },
+                update: {
+                    method: 'PUT',
+                    url: ROUTING_CONFIG.apiUrl + '/account/app'
                 }
             });
             return {
@@ -22,6 +26,9 @@ angular.module('marinetApp')
                 },
                 save: function (obj) {
                     return apps.save(obj).$promise;
+                },
+                update: function (obj) {
+                    return apps.update(obj).$promise;
                 },
                 purge: function (appName) {
                     return apps.purge({

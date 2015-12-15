@@ -7,7 +7,7 @@ module.exports = function(Models, Q){
             
             if (!data.id) defered.reject({message: "id is required to find an app"});
             
-            Models.App.findById(data._id).exec(function(err, app){
+            Models.App.findById(data.id).exec(function(err, app){
                 
                 if (err) defered.reject(err);
                 if (!app) return defered.reject({message: "App not found"});

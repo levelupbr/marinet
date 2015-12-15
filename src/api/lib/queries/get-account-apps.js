@@ -40,6 +40,7 @@ module.exports = function (Models, Q) {
                                 accountId: '$accountId',
                                 appName: '$appName',
                                 hash: '$hash',
+                                allowed: '$allowed',
                                 open: {
 
                                     $cond: {
@@ -56,6 +57,7 @@ module.exports = function (Models, Q) {
                                     accountId: '$accountId',
                                     appName: '$appName',
                                     hash: '$hash',
+                                    allowed: '$allowed',
                                     open: '$open'
                                 },
                                 count: {
@@ -74,7 +76,8 @@ module.exports = function (Models, Q) {
                                         id: apps[i]._id,
                                         key: apps[i].key,
                                         errors: 0,
-                                        openErrors: 0
+                                        openErrors: 0,
+                                        allowed: apps[i].allowed
                                     });
                                 }
 

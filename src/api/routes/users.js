@@ -1,7 +1,7 @@
 'use strict';
 
 function application(app, queries) {
-    app.get('/users', function (req, res) {
+    app.get('/account/users', function (req, res) {
         queries.getUsers.execute()
             .then(function (body) {
                 res.status(200)

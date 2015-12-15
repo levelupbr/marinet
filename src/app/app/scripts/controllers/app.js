@@ -1,33 +1,63 @@
 'use strict';
 
 angular.module('marinetApp')
-    .controller('AppCtrl', ['$scope', 'Apps','$routeParams', 
-        function ($scope, apps, rParams) {
+    .controller('AppCtrl', ['$scope', 'Users', 'Apps', 
+        function ($scope, usersService, AppService) {
             
-            $scope.selectedApp = {};
+            $scope.toggleDisabled = true;
             
-            $scope.applications = apps.find();
-            
-            function User(name){
-                
-                let apps = [];
-                
-                this.name = name;
-                
-                this.__defineGetter__('application', () => apps.find( (app) => app.name === $scope.selectedApp.name ));
-                
-                this.__defineSetter__('application', () => apps.push({name: $scope.selectedApp.name, allowed: true}) );
-                
-            }
-            
-            function loadUsers(){
-                console.log($scope.applications);
-            }            
-            
-            $scope.setApplication = function(application){
-                $scope.selectedApp = application;
-                loadUsers();
+            $scope.viewModel = {
+                apps: JSON.parse(JSON.stringify($scope.apps)),
+                users: {},
+                get app(){
+                    return this.apps.find( (app)=> {
+                        if (typeof $scope.selectedApp === "undefined") return;
+                        return app.id === $scope.selectedApp.id;
+                    } );
+                }
             };
             
+            usersService.find().$promise.then((users)=>{
+                
+                users.splice(users.findIndex((user)=>user.accountName===$scope.user.accountName), 1);                
+                $scope.viewModel.users = users;
+                
+                $scope.viewModel.apps.forEach((app)=>{
+                    app.users = {};
+                    users.forEach((user)=>{
+                        Object.defineProperty(app.users, user._id, {value: {allowed: app.allowed.indexOf(user.accountId) > -1 ? true: false} });
+                    });
+                });
+
+            });
+
+            $scope.setApplication = function(application){
+                $scope.selectedApp = application;
+                $scope.toggleDisabled = false;
+            };
+            
+            function isAppSelected(){
+                return $scope.selectedApp;
+            }
+            
+            $scope.update = function(userAccountId){
+                
+                if (!isAppSelected()) return console.warn("No application selected");
+                
+                if (!userAccountId) return console.warn("User has no accountId");
+                
+                var index = $scope.selectedApp.allowed.indexOf(userAccountId);                                
+                var args = [];
+                
+                if ( index < 0){
+                    args = [index, 0, userAccountId.toString()];
+                }else{
+                    args = [index, 1];
+                }
+                
+                $scope.selectedApp.allowed.splice.apply($scope.selectedApp.allowed, args);
+                
+                AppService.update($scope.selectedApp);
+            };
         }
     ]);
