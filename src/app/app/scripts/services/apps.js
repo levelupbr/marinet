@@ -18,11 +18,19 @@ angular.module('marinetApp')
                 update: {
                     method: 'PUT',
                     url: ROUTING_CONFIG.apiUrl + '/account/app'
+                },
+                owned: {
+                    method: 'GET',
+                    url: ROUTING_CONFIG.apiUrl + '/account/apps/owned',
+                    isArray: true
                 }
             });
             return {
                 find: function () {
                     return apps.query();
+                },
+                getOwn: function () {
+                    return apps.owned().$promise;
                 },
                 save: function (obj) {
                     return apps.save(obj).$promise;

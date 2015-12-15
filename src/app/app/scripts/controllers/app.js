@@ -6,31 +6,39 @@ angular.module('marinetApp')
             
             $scope.toggleDisabled = true;
             
-            $scope.viewModel = {
-                apps: JSON.parse(JSON.stringify($scope.apps)),
-                users: {},
-                get app(){
-                    return this.apps.find( (app)=> {
-                        if (typeof $scope.selectedApp === "undefined") return;
-                        return app.id === $scope.selectedApp.id;
-                    } );
-                }
-            };
-            
-            usersService.find().$promise.then((users)=>{
+            AppService.getOwn().then((ownedApps)=>{
                 
-                users.splice(users.findIndex((user)=>user.accountName===$scope.user.accountName), 1);                
-                $scope.viewModel.users = users;
+                $scope.ownedApps = ownedApps;
                 
-                $scope.viewModel.apps.forEach((app)=>{
-                    app.users = {};
-                    users.forEach((user)=>{
-                        Object.defineProperty(app.users, user._id, {value: {allowed: app.allowed.indexOf(user.accountId) > -1 ? true: false} });
-                    });
-                });
-
+                $scope.viewModel = {
+                    apps: JSON.parse(JSON.stringify($scope.ownedApps)),
+                    users: {},
+                    get app(){
+                        return this.apps.find( (app)=> {
+                            if (typeof $scope.selectedApp === "undefined") return;
+                            return app.id === $scope.selectedApp.id;
+                        } );
+                    }
+                };
+                
+                if (ownedApps.length > 0) loadUsers();
             });
+            
+            function loadUsers(){
+                usersService.find().$promise.then((users)=>{
 
+                    users.splice(users.findIndex((user)=>user.accountName===$scope.user.accountName), 1);                
+                    $scope.viewModel.users = users;
+
+                    $scope.viewModel.apps.forEach((app)=>{
+                        app.users = {};
+                        users.forEach((user)=>{
+                            Object.defineProperty(app.users, user._id, {value: {allowed: app.allowed.indexOf(user.accountId) > -1 ? true: false} });
+                        });
+                    });
+
+                });
+            }
             $scope.setApplication = function(application){
                 $scope.selectedApp = application;
                 $scope.toggleDisabled = false;

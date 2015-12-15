@@ -2,10 +2,10 @@
 
 module.exports = function (Models, Q) {
     return {
-        'execute': function (accountId) {
+        'execute': function (accountId, onlyOwned) {
             let defered = Q.defer();
 
-            var criteria = {				
+            var criteria = onlyOwned ? {accountId: accountId} : {
                 $or: [
                     {
                         accountId: accountId

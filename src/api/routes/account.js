@@ -12,6 +12,18 @@ function account(app, config, queries, commands, passport) {
                 });
             });
     });
+    
+    app.get('/account/apps/owned', function (req, res) {
+        queries.getAccountApps.execute(req.user.accountId, true)
+            .then(function (apps) {
+                res.json(apps);
+            }).catch(function (err) {
+                res.status(503).json({
+                    error: "bad_gateway",
+                    reason: err.message
+                });
+            });
+    });
 
     app.post('/account/app', function (req, res) {
         let

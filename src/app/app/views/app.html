@@ -21,7 +21,7 @@
 <div class="container padded">
     <div class="row">
         <div class="btn-group" data-toggle="buttons">
-            <label class="btn btn-primary" ng-repeat="app in apps" ng-click="setApplication(app)">
+            <label class="btn btn-primary" ng-repeat="app in ownedApps" ng-click="setApplication(app)">
                 <input type="radio">{{app.name}}
             </label>
         </div>
