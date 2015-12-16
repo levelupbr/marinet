@@ -16,7 +16,8 @@ const
     cors = require('express-cors'),
     app = express(),
     zmq = require('zmq'),
-    publisher = zmq.socket('pub');
+    publisher = zmq.socket('pub'),
+    errorStatus = require('./setup/errorStatus.js');
 
 let redisClient = {},
     RedisStore = {};
@@ -184,11 +185,11 @@ app.use(['/account/app'], auth.hasAccess('admin'));
 
 const
     errors = require('./routes/errors.js')(app, queries, commands, publisher),
-    account = require('./routes/account.js')(app, config, queries, commands, passport),
+    account = require('./routes/account.js')(app, config, queries, commands, passport, errorStatus),
     application = require('./routes/application.js')(app, config, commands),
     comments = require('./routes/comments.js')(app, queries, commands),
     users = require('./routes/users.js')(app, queries);
-
+        
 app.get('/', function (req, res) {
     res.json('I\'m working...');
 });

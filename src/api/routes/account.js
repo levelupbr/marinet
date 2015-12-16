@@ -1,6 +1,6 @@
 'use strict';
 
-function account(app, config, queries, commands, passport) {
+function account(app, config, queries, commands, passport, errorStatus) {
     app.get('/account/apps', function (req, res) {
         queries.getAccountApps.execute(req.user.accountId)
             .then(function (apps) {
@@ -18,9 +18,10 @@ function account(app, config, queries, commands, passport) {
             .then(function (apps) {
                 res.json(apps);
             }).catch(function (err) {
-                res.status(503).json({
-                    error: "bad_gateway",
-                    reason: err.message
+                let status = errorStatus[err.errorType] || errorStatus["DEFAULT"];
+                res.status(status.code).json({
+                    error: status.error,
+                    reason: err.message || status.reason
                 });
             });
     });
@@ -49,10 +50,11 @@ function account(app, config, queries, commands, passport) {
         commands.updateApp.allowedUsers(accountId, app)
             .then(function (app) {
                 res.status(201).json(app);
-            }).catch(function (err) {
-                res.status(503).json({
-                    error: "bad_gateway",
-                    reason: err.message
+            }).catch(function (err) {console.log(errorStatus);
+                let status = errorStatus[err.errorType] || errorStatus["DEFAULT"];
+                res.status(status.code).json({
+                    error: status.error,
+                    reason: err.message || status.reason
                 });
             });
     });
