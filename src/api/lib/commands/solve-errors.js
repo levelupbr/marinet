@@ -9,14 +9,15 @@ module.exports = function (Models, Q) {
                 hash: hash
             }, {
                 solved: true,
-				$inc: {
-					solveAttempts: 1
-				}
+                $inc: {
+                    solveAttempts: 1
+                }
             }, {
                 multi: true
             }).exec(function (err, numberAffected, raw) {
                 console.log("Updated %s docs", numberAffected);
-                if (err) defered.reject(err);
+                if (err)
+                    defered.reject(err);
                 defered.resolve(raw);
             });
 
