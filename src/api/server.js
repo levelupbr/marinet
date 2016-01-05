@@ -17,7 +17,8 @@ const
     app = express(),
     zmq = require('zmq'),
     publisher = zmq.socket('pub'),
-    errorStatus = require('./setup/errorStatus.js');
+    errorStatus = require('./setup/errorStatus.js'),
+    moment = require('moment');
 
 let redisClient = {},
     RedisStore = {};
@@ -184,7 +185,7 @@ app.use(['/logout', '/user/me', '/account/app*','/*/errors$', '/error/(!throw)*'
 app.use(['/account/app'], auth.hasAccess('admin'));
 
 const
-    errors = require('./routes/errors.js')(app, queries, commands, publisher),
+    errors = require('./routes/errors.js')(app, queries, commands, publisher, moment),
     account = require('./routes/account.js')(app, config, queries, commands, passport, errorStatus),
     application = require('./routes/application.js')(app, config, commands),
     comments = require('./routes/comments.js')(app, queries, commands),

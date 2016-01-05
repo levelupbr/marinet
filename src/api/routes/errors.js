@@ -1,6 +1,6 @@
 'use strict';
 
-function errors(app, queries, commands, publisher) {
+function errors(app, queries, commands, publisher, moment) {
 
     app.get('/:appName/errors', function (req, res) {
         queries.searchErrors
@@ -115,7 +115,7 @@ function errors(app, queries, commands, publisher) {
         commands.solveErrors
             .execute(req.params.hash)
             .then(function (result) {
-                commands.createComment.execute({message:"Solved on: " + new Date().toString(), errorHash:req.params.hash}, req.user);
+                commands.createComment.execute({message:"Solved on: " + moment().format('YYYY-MM-DD HH:mm:ss'), errorHash:req.params.hash}, req.user);
                 res.status(200).json('Solved');
             })
             .catch(function (err) {
