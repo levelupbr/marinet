@@ -32,12 +32,9 @@ const Models = require('./lib/models.js')(deferedDb);
 
 const
     queries = {
-        //'getAppErrors': require('./lib/queries/get-app-errors.js')(deferedDb, Q),
         'getAccountApps': require('./lib/queries/get-account-apps.js')(Models, Q),
         'getAppName': require('./lib/queries/get-app-name.js')(Models, Q),
         'getErrorsByHash': require('./lib/queries/get-errors-by-hash.js')(Models, Q),
-        //'getAppByName': require('./lib/queries/get-app-by-name.js')(Models, Q),
-        //'getUserById': require('./lib/queries/get-user-by-id.js')(deferedDb, Q),
         'getUserByLogin': require('./lib/queries/get-user-by-login.js')(Models, Q),
         'getErrorsById': require('./lib/queries/get-errors-by-id.js')(Models, Q),
         'getCommentsByErrorHash': require('./lib/queries/get-comments-by-error-hash.js')(Models, Q),
@@ -70,7 +67,7 @@ app.set('port', process.env.PORT || 3000);
 const auth = {
 
     secure: function(req, res, next) {
-        
+
         if (req.isAuthenticated()) {
             return next();
         } else if (redisClient.ready || 'production' !== environment) {
@@ -86,22 +83,22 @@ const auth = {
         }
     },
     hasAccess: function(role) {
-    
+
         var roles = {
             user: 2, // 010
             admin: 4 // 100
         };
-        
+
         var accessLevels = {
             user: roles.user | roles.admin,
             admin: roles.admin
         }
-    
+
         return function (req, res, next)
         {
             if ( roles[req.user.roles[0]] & roles[role] )
                 return next();
-                
+
             res.status(403).json({
                 error: "unauthorized",
                 reason: "access_denied"

@@ -15,6 +15,11 @@ module.exports = function (mongoose) {
             type: Boolean,
             index: true
         },
+        autoClosed: {
+            type: Boolean,
+            default: false,
+            index: true
+        },
         appName: {
             type: String,
             index: true

@@ -19,7 +19,7 @@ function errors(app, queries, commands, publisher, moment) {
             })
             .done();
     });
-    
+
     app.delete('/:appName/errors', function (req, res) {
         commands.purgeErrors.execute(req.params.appName)
             .then(function () {
@@ -31,7 +31,7 @@ function errors(app, queries, commands, publisher, moment) {
             })
             .done();
     });
-    
+
     app.get('/:appName/errors/by-hardware-id', function (req, res) {
         queries.getErrorsByHardwareId.execute(req.params.appName)
             .then(function (errors) {
@@ -43,8 +43,8 @@ function errors(app, queries, commands, publisher, moment) {
             })
             .done();
     });
-    
-    
+
+
     app.get('/:appName/errors/count', function (req, res) {
         queries.getErrorsByApp.execute(req.params.appName)
             .then(function (errors) {
@@ -56,10 +56,10 @@ function errors(app, queries, commands, publisher, moment) {
             })
             .done();
     });
-    
+
     app.post('/error', function (req, res) {
         let error = req.body;
-        
+
         publisher.send(JSON.stringify({
             type: 'newerror',
             error: error,
@@ -76,7 +76,29 @@ function errors(app, queries, commands, publisher, moment) {
 
     });
 
-    
+    app.delete('/error', function (req, res) {
+        let error = req.body;
+
+        if ( ! error.hardwareId )
+          return res.status(400).json({ "message": "Invalid hardwareId"});
+
+        publisher.send(JSON.stringify({
+            type: 'closeErrors',
+            error: error,
+            app: {
+                id: req.headers["marinet-appid"],
+                key: req.headers["marinet-appkey"]
+            },
+            date: Date.now()
+        }));
+
+        res.status(201).json({
+            'message': 'queued'
+        });
+
+    });
+
+
     app.get('/:appName/error/:hash', function (req, res) {
 
         queries.getErrorsByHash

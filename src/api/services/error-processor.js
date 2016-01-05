@@ -10,6 +10,7 @@ const
     Models = require('../lib/models.js')(deferedDb),
     getAppName = require('../lib/queries/get-app-name.js')(Models, Q),
     createError = require('../lib/commands/create-error.js')(Models, Q),
+    closeUserErrors = require('../lib/commands/close-user-errors.js')(Models, Q),
     subscriber = zmq.socket('sub');
 
 let
@@ -25,7 +26,8 @@ subscriber.on("message", function (data) {
     console.log("Id: %s, Key: %s", message.app.id, message.app.key);
     getAppName.execute(message.app.id, message.app.key)
         .then(function (app) {
-            return createError.execute(message.error, app)
+           let cmd = message.type === 'closeErrors' ? closeUserErrors : createError;
+            return cmd.execute(message.error, app)
                 .then(function (error) {
                     countSuccess++;
                     console.log({
