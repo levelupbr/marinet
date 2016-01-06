@@ -77,7 +77,8 @@ module.exports = function (Models, Q) {
                                         key: apps[i].key,
                                         errors: 0,
                                         openErrors: 0,
-                                        allowed: apps[i].allowed
+                                        allowed: apps[i].allowed,
+                                        mute: apps[i].mute
                                     });
                                 }
 

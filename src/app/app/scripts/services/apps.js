@@ -23,7 +23,11 @@ angular.module('marinetApp')
                     method: 'GET',
                     url: ROUTING_CONFIG.apiUrl + '/account/apps/owned',
                     isArray: true
-                }
+                },
+                mute: {
+                    method: 'POST',
+                    url: ROUTING_CONFIG.apiUrl + '/account/mute'
+                },
             });
             return {
                 find: function () {
@@ -41,6 +45,12 @@ angular.module('marinetApp')
                 purge: function (appName) {
                     return apps.purge({
                         appName: appName
+                    }).$promise;
+                },
+                mute: function(appName, value) {
+                    return apps.mute({
+                        appName: appName,
+                        isMute: value
                     }).$promise;
                 }
             };

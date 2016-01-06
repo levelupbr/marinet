@@ -46,6 +46,7 @@
                                         <td>Key</td>
                                         <td>Open errors (by users)</td>
                                         <td></td>
+                                        <td>Mute?</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -57,8 +58,16 @@
                                         <td class="text-center">
                                             <div class="btn-group">
                                                 <a ng-disabled="!app.errors" ng-href="{{user.accountName}}/{{app.name}}/errors" class="btn btn-success">Erros</a>
-                                                <button class="btn btn-danger" ng-disabled="!app.errors" ng-click="purge(app.name)">Purge</button>
+                                                <button class="btn btn-danger" ng-disabled="!app.errors" ng-click="purge(app.name)
+                                                ">Purge</button>
                                             </div>
+                                        </td>
+                                        <td>
+                                            <toggle-switch 
+                                                ng-change="mute(app.name, isMute)"
+                                                ng-model="isMute" 
+                                                on-label="yes" 
+                                                off-label="no"/>
                                         </td>
                                     </tr>
                                 </tbody>

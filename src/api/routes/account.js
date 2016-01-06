@@ -26,6 +26,22 @@ function account(app, config, queries, commands, passport, errorStatus) {
             });
     });
 
+    app.post('/account/mute', function (req, res) {
+        let
+            app = req.body;
+            
+        commands.muteApp.execute(app.appName, app.isMute)
+            .then(function (app) {
+                res.json(app);
+            }).catch(function (err) {
+                let status = errorStatus[err.errorType] || errorStatus["DEFAULT"];
+                res.status(status.code).json({
+                    error: status.error,
+                    reason: err.message || status.reason
+                });
+            });
+    });
+
     app.post('/account/app', function (req, res) {
         let
             app = req.body,

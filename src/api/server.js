@@ -53,7 +53,8 @@ const
         'createUser': require('./lib/commands/create-user.js')(Models, Q),
         'purgeErrors': require('./lib/commands/purge-errors.js')(Models, Q),
         'createAccount': require('./lib/commands/create-account.js')(Models, Q),
-        'updateApp': require('./lib/commands/update-app.js')(Models, Q)
+        'updateApp': require('./lib/commands/update-app.js')(Models, Q),
+        'muteApp': require('./lib/commands/mute-app.js')(Models, Q),
     };
 
 app.use(cors({
