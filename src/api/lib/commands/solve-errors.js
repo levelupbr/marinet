@@ -9,6 +9,10 @@ module.exports = function (Models, Q) {
                 hash: hash
             }, {
                 solved: true,
+                reopen: true,
+                solvedAt: new Date(),
+                updatedAt: new Date(),
+                //solvedDates.push(new Date()),
 				$inc: {
 					solveAttempts: 1
 				}

@@ -28,9 +28,22 @@ module.exports = function (Models, Q) {
             Models.Error.findOne({hash: hash, hardwareId: data.hardwareId}).exec(function(err, error){
 
                 if (err) return defered.reject(err);
-                if ( ! error ) error = create();
 
-                error.occurrences.push(new Date());
+                var dateNow = new Date();
+
+                if ( ! error ){
+                    error = create();
+                }
+                else {
+                    if ( error.solved === true ){
+                        error.reopen = true;
+                        error.reopenDates.push(dateNow);
+                    }
+                    error.updateAt = dateNow;
+                }
+
+                error.occurrences.push(dateNow);
+                error.openedAt = dateNow;
                 error.autoClosed = false;
                 
                 error.save(function (err, error) {
@@ -43,7 +56,7 @@ module.exports = function (Models, Q) {
                 hash: hash,
                 autoClosed: false
             }, {
-                solved: false,
+                solved: false
             }, {
                 multi: true
             }).exec(function (err, numberAffected, raw) {

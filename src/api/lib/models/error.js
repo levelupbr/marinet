@@ -15,7 +15,24 @@ module.exports = function (mongoose) {
             type: Boolean,
             index: true
         },
+        solvedAt: {
+            type: Date,
+            index: true
+        },
+        openedAt: {
+            type: Date,
+            index: true
+        },
+        updatedAt: {
+            type: Date,
+            index: true
+        },
         autoClosed: {
+            type: Boolean,
+            default: false,
+            index: true
+        },
+        reopen: {
             type: Boolean,
             default: false,
             index: true
@@ -39,7 +56,9 @@ module.exports = function (mongoose) {
 		},
         selected: String,
         others: [{}],
-        occurrences: [{}]
+        occurrences: [{}],
+        solveDates: [Date],
+        reopenDates: [Date]
     }, {
         strict: false
     });

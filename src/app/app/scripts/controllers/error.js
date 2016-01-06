@@ -11,6 +11,7 @@ angular.module('marinetApp')
 
             $scope.error = Errors.get($scope.hash, $scope.name, function (error) {
                 $scope.solved = error.solved;
+                $scope.reopen = error.reopen;
             });
 
             $scope.solve = function () {
