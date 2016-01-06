@@ -3,7 +3,7 @@
         <div class="area-top clearfix">
             <div class="pull-left header">
                 <h3 class="title"><i ng-class="{'icon-ok-sign': solved, 'icon-minus-sign': !solved}"></i>{{error.message | truncate:25}}</h3>
-                <h5><span>A subtitle can go here</span></h5>
+                <h5><span>Error</span></h5>
             </div>
         </div>
     </div>
@@ -31,6 +31,14 @@
         <div class="box-header">
             <span class="title text-error">Error</span>
             <ul class="box-toolbar">
+                <li>
+                  <a ng-click="toggleIgnore()" class="btn btn-sm btn-info" ng-if="!ignore">
+                      <i class="glyphicon glyphicon glyphicon-volume-down"></i> mute
+                  </a>
+                  <a ng-click="toggleIgnore()" class="btn btn-sm btn-warning" ng-if="ignore">
+                      <i class="glyphicon glyphicon glyphicon-volume-off"></i> unmute
+                  </a>
+                </li>
                 <li>
                     <a href="#" class="btn btn-sm btn-green" ng-if="solved" disabled="disabled">
                         <i class="icon-ok-sign"></i> solved

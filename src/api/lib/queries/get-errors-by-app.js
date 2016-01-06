@@ -14,7 +14,7 @@ module.exports = function (Models, Q) {
                     }
                 }
             };
-            
+
             //TODO: Use elastic search!
             let query = Models.Error.aggregate([
                 match,
@@ -30,7 +30,7 @@ module.exports = function (Models, Q) {
 
             query.exec(function (err, errors) {
                 if (err) return defered.reject(err);
-                
+
                 defered.resolve({
                     count: errors.length
                 })

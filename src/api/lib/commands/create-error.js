@@ -22,32 +22,38 @@ module.exports = function (Models, Q) {
             let defered = Q.defer();
             let hash = crypto.createHash('md5').update(JSON.stringify(data.message + data.exception + app.name)).digest("hex");
 
-            if ( ! data.hardwareId )
-                data.hardwareId = 'not_sent';
+            Models.Error.findOne({hash: hash, ignore: true}).exec(function(err, ignored) {
 
-            Models.Error.findOne({hash: hash, hardwareId: data.hardwareId}).exec(function(err, error){
+                if (err||ignored) return defered.reject(err||"Ingored error");
 
-                if (err) return defered.reject(err);
-                if ( ! error ) error = create();
+                if ( ! data.hardwareId )
+                    data.hardwareId = 'not_sent';
 
-                error.occurrences.push(new Date());
-                error.autoClosed = false;
-                
-                error.save(function (err, error) {
-                    if (err) defered.reject(err);
-                    defered.resolve(error);
+                Models.Error.findOne({hash: hash, hardwareId: data.hardwareId}).exec(function(err, error){
+
+                    if (err) return defered.reject(err);
+                    if ( ! error ) error = create();
+
+                    error.occurrences.push(new Date());
+                    error.autoClosed = false;
+
+                    error.save(function (err, error) {
+                        if (err) defered.reject(err);
+                        defered.resolve(error);
+                    });
                 });
-            });
 
-            Models.Error.update({
-                hash: hash,
-                autoClosed: false
-            }, {
-                solved: false,
-            }, {
-                multi: true
-            }).exec(function (err, numberAffected, raw) {
-                console.log("Error with hash %s unsolved", hash);
+                Models.Error.update({
+                    hash: hash,
+                    autoClosed: false
+                }, {
+                    solved: false,
+                }, {
+                    multi: true
+                }).exec(function (err, numberAffected, raw) {
+                    console.log("Error with hash %s unsolved", hash);
+                });
+
             });
 
             return defered.promise;
