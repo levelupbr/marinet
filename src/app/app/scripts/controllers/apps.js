@@ -26,9 +26,6 @@ angular.module('marinetApp')
                 
 
                  if(value) {
-                    if (!confirm('Você não receberá mais notificações de erro. Desejar confirmar essa ação?'))
-                        return;
-
                     successMessage = 'Notificações desativadas com sucesso';
                     errorMessage = 'Não foi possível desativar notificações de erro';
                 } else {

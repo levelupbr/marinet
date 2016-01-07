@@ -11,6 +11,9 @@ module.exports = function (Models, Q) {
                     },
                     solved: {
                         $eq: filter.solved
+                    },
+                    ignore: {
+                        $ne: true
                     }
                 }
             };
@@ -84,7 +87,6 @@ module.exports = function (Models, Q) {
                         }
                     }
                 }]).exec(function (err, res) {
-                console.log(res);
                 if (err) defered.reject(err);
                 else if (res) {
                     let total = res ? res[0] ? res[0].count : 0 : 0;

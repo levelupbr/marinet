@@ -48,6 +48,7 @@ const
         'initialSetup': require('./lib/commands/initial-setup.js')(Models, Q),
         'createApp': require('./lib/commands/create-app.js')(Models, Q),
         'solveErrors': require('./lib/commands/solve-errors.js')(Models, Q),
+        'ignoreErrors': require('./lib/commands/ignore-errors.js')(Models, Q),
         'validatePassword': require('./lib/commands/validate-password.js')(Q),
         'createComment': require('./lib/commands/create-comment.js')(Models, Q),
         'createUser': require('./lib/commands/create-user.js')(Models, Q),
@@ -188,7 +189,7 @@ const
     application = require('./routes/application.js')(app, config, commands),
     comments = require('./routes/comments.js')(app, queries, commands),
     users = require('./routes/users.js')(app, queries);
-        
+
 app.get('/', function (req, res) {
     res.json('I\'m working...');
 });

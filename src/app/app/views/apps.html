@@ -41,17 +41,19 @@
                             <table class="table table-normal">
                                 <thead>
                                     <tr>
-                                        <td>Nome</td>
-                                        <td>Id</td>
-                                        <td>Open errors (by users)</td>
-                                        <td></td>
-                                        <td>Mute?</td>
+                                        <td class="">Nome</td>
+                                        <td class="">Id</td>
+                                        <td class="">Key</td>
+                                        <td class="">Open errors (by users)</td>
+                                        <td class=""></td>
+                                        <td class="">Mute?</td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="app in apps">
                                         <td ng-bind="app.name"></td>
-                                        <td ng-bind="app.id"></td>
+                                        <td><small ng-bind="app.id"></small></td>
+                                        <td><small ng-bind="app.key"></small></td>
                                         <td ng-bind="app.errors"></td>
                                         <td class="text-center">
                                             <div class="btn-group">

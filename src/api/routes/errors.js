@@ -133,6 +133,18 @@ function errors(app, queries, commands, publisher, moment) {
             }).done();
     });
 
+    // Need remove action from url
+    app.put('/error/ignore/:hash', function (req, res) {
+        commands.ignoreErrors
+            .execute(req.params.hash, req.body.ignore)
+            .then(function (result) {
+                res.status(200).json(req.body.ignore ? 'ignored' : 'unignored');
+            })
+            .catch(function (err) {
+                res.json(err);
+            }).done();
+    });
+
     app.put('/error/:hash', function (req, res) {
         commands.solveErrors
             .execute(req.params.hash)
