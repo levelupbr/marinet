@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('marinetApp')
-    .controller('AppsCtrl', ['$scope','toaster','Errors',
-        function ($scope, toaster, Errors) {
+    .controller('AppsCtrl', ['$scope','toaster','Errors','Apps',
+        function ($scope, toaster, Errors, Apps) {
             
             $scope.purge = function(name)
             {
@@ -19,4 +19,28 @@ angular.module('marinetApp')
 
             };
 
-  }]);
+            $scope.mute = function(name, value){
+                
+                let errorMessage = '';
+                let successMessage = '';
+                
+
+                 if(value) {
+                    successMessage = 'Notificações desativadas com sucesso';
+                    errorMessage = 'Não foi possível desativar notificações de erro';
+                } else {
+
+                    successMessage = 'Notificações ativadas com sucesso';
+                    errorMessage = 'Não foi possível ativar notificações de erro';
+                }
+
+                return Apps.mute(name, value).then(function(){
+                        toaster.pop('success', '', successMessage);
+                    }, function(err){
+                        console.log(err);
+                        toaster.pop('error', '', errorMessage);
+                    });
+            }
+        }
+    ]
+);

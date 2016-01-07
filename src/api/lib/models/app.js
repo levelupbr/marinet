@@ -5,7 +5,12 @@ module.exports = function (mongoose) {
         key: String,
         name: String,
         accountId: String,
-        allowed: Array
+        allowed: Array,
+        mute: {
+            type: Boolean,
+            default: false,
+            index: true
+        } 
     });
 
     return mongoose.model('App', schema);

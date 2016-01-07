@@ -41,24 +41,33 @@
                             <table class="table table-normal">
                                 <thead>
                                     <tr>
-                                        <td>Nome</td>
-                                        <td>Id</td>
-                                        <td>Key</td>
-                                        <td>Open errors (by users)</td>
-                                        <td></td>
+                                        <td class="">Nome</td>
+                                        <td class="">Id</td>
+                                        <td class="">Key</td>
+                                        <td class="">Open errors (by users)</td>
+                                        <td class=""></td>
+                                        <td class="">Mute?</td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="app in apps">
                                         <td ng-bind="app.name"></td>
-                                        <td ng-bind="app.id"></td>
-                                        <td ng-bind="app.key"></td>
+                                        <td><small ng-bind="app.id"></small></td>
+                                        <td><small ng-bind="app.key"></small></td>
                                         <td ng-bind="app.errors"></td>
                                         <td class="text-center">
                                             <div class="btn-group">
                                                 <a ng-disabled="!app.errors" ng-href="{{user.accountName}}/{{app.name}}/errors" class="btn btn-success">Erros</a>
-                                                <button class="btn btn-danger" ng-disabled="!app.errors" ng-click="purge(app.name)">Purge</button>
+                                                <button class="btn btn-danger" ng-disabled="!app.errors" ng-click="purge(app.name)
+                                                ">Purge</button>
                                             </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <toggle-switch 
+                                                ng-change="mute(app.name, isMute)"
+                                                ng-model="isMute" 
+                                                on-label="yes" 
+                                                off-label="no"/>
                                         </td>
                                     </tr>
                                 </tbody>

@@ -20,19 +20,28 @@ module.exports = function (Models, Q) {
             }
 
             let defered = Q.defer();
+            if(app.mute){
+                 defered.reject('Create/Update Errors is not allowed for this app.');
+                 return defered.promise;
+            }
+
             let hash = crypto.createHash('md5').update(JSON.stringify(data.message + data.exception + app.name)).digest("hex");
 
             Models.Error.findOne({hash: hash, ignore: true}).exec(function(err, ignored) {
 
-                if (err||ignored) return defered.reject(err||"Ingored error");
+                if (err || ignored) 
+                    return defered.reject(err||"Ingored error");
 
                 if ( ! data.hardwareId )
                     data.hardwareId = 'not_sent';
 
                 Models.Error.findOne({hash: hash, hardwareId: data.hardwareId}).exec(function(err, error){
-
-                    if (err) return defered.reject(err);
-                    if ( ! error ) error = create();
+                    
+                    if (err) 
+                        return defered.reject(err);
+                    
+                    if ( ! error ) 
+                        error = create();
 
                     error.occurrences.push(new Date());
                     error.autoClosed = false;
