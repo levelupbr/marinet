@@ -15,6 +15,11 @@ module.exports = function (mongoose) {
             type: Boolean,
             index: true
         },
+        ignore: {
+            type: Boolean,
+            index: true,
+            default: false
+        },
         autoClosed: {
             type: Boolean,
             default: false,

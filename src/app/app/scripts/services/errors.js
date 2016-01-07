@@ -19,6 +19,13 @@ angular.module('marinetApp')
                         hash: '@hash'
                     }
                 },
+                'ignore': {
+                    method: 'PUT',
+                    url: ROUTING_CONFIG.apiUrl + '/error/ignore/:hash',
+                    params: {
+                        hash: '@hash'
+                    }
+                },
                 purge: {
                     method: 'DELETE',
                     url: ROUTING_CONFIG.apiUrl + '/:appName/errors'
@@ -55,6 +62,12 @@ angular.module('marinetApp')
                     return errors.solve({
                         hash: hash,
                         appName: appName
+                    }).$promise;
+                },
+                ignore: function (hash, ignore) {
+                    return errors.ignore({
+                        hash: hash,
+                        ignore: ignore
                     }).$promise;
                 },
                 purge: function(appName) {

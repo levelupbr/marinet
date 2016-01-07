@@ -11,6 +11,7 @@ angular.module('marinetApp')
 
             $scope.error = Errors.get($scope.hash, $scope.name, function (error) {
                 $scope.solved = error.solved;
+                $scope.ignore = error.ignore;
             });
 
             $scope.solve = function () {
@@ -18,6 +19,13 @@ angular.module('marinetApp')
                 Errors.solve($scope.hash, $scope.name).then(function (data) {
                     $scope.solved = true;
                 });
+            };
+
+            $scope.toggleIgnore = function() {
+              Errors.ignore($scope.hash, !$scope.ignore).then(function (data) {
+                  $scope.ignore = !$scope.ignore;
+                  toaster.pop('success', '', $scope.ignore ? 'muted' : 'unmuted');
+              });
             };
 
             $scope.load = function (id) {
@@ -41,11 +49,11 @@ angular.module('marinetApp')
 
                 return val;
             };
-            
+
             $scope.parseErrorValue = function(value){
                 if (Number.isInteger(value)){
                     return value;
-                }                
+                }
                 return value.length <= 200 ? $scope.displayVal(value) : "<pre>" + value + "</pre>";
             };
     }]);
