@@ -21,7 +21,8 @@ module.exports = function (Models, Q) {
 
             let defered = Q.defer();
             if(app.mute){
-                 return defered.reject('Create/Update Errors is not allowed for this app.');
+                 defered.reject('Create/Update Errors is not allowed for this app.');
+                 return defered.promise;
             }
 
             let hash = crypto.createHash('md5').update(JSON.stringify(data.message + data.exception + app.name)).digest("hex");

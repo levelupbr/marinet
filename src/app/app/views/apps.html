@@ -43,7 +43,6 @@
                                     <tr>
                                         <td>Nome</td>
                                         <td>Id</td>
-                                        <td>Key</td>
                                         <td>Open errors (by users)</td>
                                         <td></td>
                                         <td>Mute?</td>
@@ -53,7 +52,6 @@
                                     <tr ng-repeat="app in apps">
                                         <td ng-bind="app.name"></td>
                                         <td ng-bind="app.id"></td>
-                                        <td ng-bind="app.key"></td>
                                         <td ng-bind="app.errors"></td>
                                         <td class="text-center">
                                             <div class="btn-group">
@@ -62,7 +60,7 @@
                                                 ">Purge</button>
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <toggle-switch 
                                                 ng-change="mute(app.name, isMute)"
                                                 ng-model="isMute" 
