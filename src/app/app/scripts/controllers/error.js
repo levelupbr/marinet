@@ -32,6 +32,7 @@ angular.module('marinetApp')
                 Errors.getById($scope.hash, id, function (result) {
                     result.others = $scope.error.others;
                     result.selected = id;
+                    $scope.solved = result.solved;
                     $scope.error = result;
                 }, function (err) {
                     console.log(err);

@@ -89,7 +89,21 @@
                     <tr>
                         <td colspan="2">
                             <ul class="pagination">
-                                <li ng-class="{disabled: error.selected == err.key}" ng-repeat="err in error.others | orderBy:'-createdAt'">
+                                <li ng-class="{disabled: error.selected == err.key}" ng-repeat="err in error.others | filter: { solved: false } | orderBy:'-createdAt'">
+                                    <a ng-click="load(err.key)" class="text-center">
+                                        {{err.createdAt|date:'medium'}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Solved Errors</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ul class="pagination">
+                                <li ng-class="{disabled: error.selected == err.key}" ng-repeat="err in error.others | filter: { solved: true } | orderBy:'-createdAt'">
                                     <a ng-click="load(err.key)" class="text-center">
                                         {{err.createdAt|date:'medium'}}
                                     </a>

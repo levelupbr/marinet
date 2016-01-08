@@ -15,11 +15,14 @@ module.exports = function (Models, Q) {
                         message: 'Not found'
                     });
                     else {
+                        errors.sort(function(error) {
+                            return error.solved ? -1 : 1;
+                        });
                         let error = errors[errors.length - 1];
                         error.others = [];
                         for (let i = 0; i < errors.length; i++) {
                             let item = errors[i];
-                            error.others.push({ key: item._id, createdAt: item.createdAt});
+                            error.others.push({ key: item._id, createdAt: item.createdAt, solved: item.solved });
                         }
                         error.selected = error._id;
                         defered.resolve(error);
