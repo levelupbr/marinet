@@ -32,6 +32,9 @@
             <span class="title text-error">Error</span>
             <ul class="box-toolbar">
                 <li>
+                  <span class="label label-danger" ng-if="reopen">reopen</span>
+                </li>
+                <li>
                   <a ng-click="toggleIgnore()" class="btn btn-sm btn-info" ng-if="!ignore">
                       <i class="glyphicon glyphicon glyphicon-volume-down"></i> mute
                   </a>

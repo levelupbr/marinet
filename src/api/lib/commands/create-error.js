@@ -9,8 +9,7 @@ module.exports = function (Models, Q) {
         'execute': function (data, app) {
             console.log('creating error', data);
 
-            let create = function()
-            {
+            let create = function() {
                 let error = new Models.Error(data);
                 error.appName = app.name;
                 error.accountId = app.accountId;
@@ -35,15 +34,16 @@ module.exports = function (Models, Q) {
                 if ( ! data.hardwareId )
                     data.hardwareId = 'not_sent';
 
+                
+                // Create/Update error by user (aka: hardwareid)
+                occurrence = new Date();
                 Models.Error.findOne({hash: hash, hardwareId: data.hardwareId}).exec(function(err, error){
-                    
                     if (err) 
                         return defered.reject(err);
                     
-                    if ( ! error ) 
+                    if ( ! error )
                         error = create();
-
-                    error.occurrences.push(new Date());
+                    error.occurrences.push(occurrence);
                     error.autoClosed = false;
 
                     error.save(function (err, error) {
@@ -52,17 +52,19 @@ module.exports = function (Models, Q) {
                     });
                 });
 
+                // Update all errors
                 Models.Error.update({
                     hash: hash,
                     autoClosed: false
                 }, {
                     solved: false,
+                    reopensAt: occurrence,
+                    $push: { reopenHist: occurrence } 
                 }, {
                     multi: true
                 }).exec(function (err, numberAffected, raw) {
                     console.log("Error with hash %s unsolved", hash);
                 });
-
             });
 
             return defered.promise;

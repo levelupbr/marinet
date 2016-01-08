@@ -84,6 +84,9 @@ module.exports = function (Models, Q) {
 
                                 var hashes = [];
 
+
+
+                                
                                 values.forEach(
                                         function(value){
                                                 result.forEach(
@@ -99,7 +102,7 @@ module.exports = function (Models, Q) {
                                                 );
                                         }
                                 );
-
+                                
                                 defered.resolve(values);
                             }
                         });

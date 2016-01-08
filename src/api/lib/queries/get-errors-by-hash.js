@@ -22,6 +22,11 @@ module.exports = function (Models, Q) {
                             error.others.push({ key: item._id, createdAt: item.createdAt});
                         }
                         error.selected = error._id;
+
+                        if(error.solvedAt < error.reopensAt)
+                            error.reopen = true;
+                        else
+                            error.reopen = false;
                         defered.resolve(error);
                     }
                 });

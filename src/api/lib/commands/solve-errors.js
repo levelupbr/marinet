@@ -4,13 +4,19 @@ module.exports = function (Models, Q) {
 
     return {
         'execute': function (hash) {
+            resolvedAt = new Date();
             let defered = Q.defer();
             Models.Error.update({
                 hash: hash
             }, {
                 solved: true,
+                reopensAt: null,
+                solvedAt: resolvedAt,
                 $inc: {
                     solveAttempts: 1
+                },
+                $push: {
+                    solvedHist: resolvedAt
                 }
             }, {
                 multi: true
