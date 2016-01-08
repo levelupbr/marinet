@@ -59,6 +59,7 @@ function errors(app, queries, commands, publisher, moment) {
 
     app.post('/error', function (req, res) {
         let error = req.body;
+        error.ip = error.ip || req.headers['x-real-ip'] || req.connection.remoteAddress;
 
         publisher.send(JSON.stringify({
             type: 'newerror',
