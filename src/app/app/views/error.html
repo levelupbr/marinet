@@ -51,11 +51,11 @@
             </ul>
         </div>
         <div class="box-content padded">
-            <table style="clear: both" class="table table-bordered table-striped responsive">
+            <table style="clear: both" class="table table-bordered table-striped responsive error-report">
                 <tbody>
                     <tr ng-repeat="(key, value) in error " ng-if="canShow(key)">
                         <td width="20%">{{key}}</td>
-                        <td width="80%">{{parseErrorValue(value)}}</td>
+                        <td width="80%" ng-bind-html="parseErrorValue(value)"></td>
                         <!--
                         <td ng-if="value.length <= 200" width="80%">{{displayVal(value)}}</td>
                         <td ng-if="value.length > 200" width="80%"><pre>{{value}}</pre></td>
@@ -63,7 +63,11 @@
                     </tr>
                     <tr>
                         <td width="20%">occurrences ({{error.occurrences.length}})</td>
-                        <td width="80%"><span ng-repeat="occurrence in error.occurrences"> {{occurrence|date:'medium'}} </span></td>
+                        <td width="80%">
+                            <ul>
+                                <li ng-repeat="occurrence in error.occurrences"> {{occurrence|date:'medium'}} </li>
+                            </ul>
+                        </td>
                     </tr>
                     <tr>
                         <td>message</td>
