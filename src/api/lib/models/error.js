@@ -49,7 +49,7 @@ module.exports = function (mongoose) {
         others: [{}],
         occurrences: [{}],
         solvedHist: [{}],
-        reopenHist: [{}]
+        reopenHist: [{}],
     }, {
         strict: false
     });
