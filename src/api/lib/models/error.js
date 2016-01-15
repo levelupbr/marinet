@@ -11,6 +11,8 @@ module.exports = function (mongoose) {
         exception: String,
         currentUser: String,
         createdAt: { type: Date, default: Date.now },
+        reopensAt: { type: Date },
+        solvedAt: { type: Date },
         solved: {
             type: Boolean,
             index: true
@@ -43,8 +45,11 @@ module.exports = function (mongoose) {
 			index: true
 		},
         selected: String,
+        diagnostic: String,
         others: [{}],
-        occurrences: [{}]
+        occurrences: [{}],
+        solvedHist: [{}],
+        reopenHist: [{}],
     }, {
         strict: false
     });
