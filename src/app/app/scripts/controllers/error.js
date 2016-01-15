@@ -3,8 +3,8 @@
 'use strict';
 
 angular.module('marinetApp')
-    .controller('ErrorCtrl', ['$scope', '$routeParams', 'Errors', 'toaster', '$filter',
-        function ($scope, $routeParams, Errors, toaster, $filter) {
+    .controller('ErrorCtrl', ['$scope', '$routeParams', 'Errors', 'toaster', '$filter', '$sce',
+        function ($scope, $routeParams, Errors, toaster, $filter, $sce) {
 
             $scope.name = $routeParams.appName;
             $scope.hash = $routeParams.hash;
@@ -32,6 +32,7 @@ angular.module('marinetApp')
                 Errors.getById($scope.hash, id, function (result) {
                     result.others = $scope.error.others;
                     result.selected = id;
+                    $scope.solved = result.solved;
                     $scope.error = result;
                 }, function (err) {
                     console.log(err);
@@ -51,9 +52,20 @@ angular.module('marinetApp')
             };
 
             $scope.parseErrorValue = function(value){
+
+                if ( value === null )
+                    return '';
+
                 if (Number.isInteger(value)){
-                    return value;
+                    return value.toString();
                 }
-                return value.length <= 200 ? $scope.displayVal(value) : "<pre>" + value + "</pre>";
+
+                if ( typeof value === 'boolean')
+                    return value.toString();
+
+                if( Array.isArray(value) )
+                    return value.length == 0 ? ' - ' : $sce.trustAsHtml("<ul><li>" + value.join('</li><li>') + "</li><ul>");
+
+                return value.length <= 200 ? $scope.displayVal(value) : $sce.trustAsHtml("<pre>" + value + "</pre>");
             };
     }]);
