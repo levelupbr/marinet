@@ -26,10 +26,18 @@ module.exports = function (Models, Q) {
                         }
                         error.selected = error._id;
 
-                        if(error.solvedAt < error.reopensAt)
-                            error.reopen = true;
-                        else
-                            error.reopen = false;
+                        if(error.hasOwnProperty('solvedAt') && error.hasOwnProperty('reopensAt')){
+                            if(error.solvedAt < error.reopensAt)
+                                error.set('reopen',true);
+                            else
+                                error.set('reopen',false);                                                        
+                        }else{
+                            if(!error.autoClosed && !error.solved)
+                                error.set('reopen',true);
+                            else
+                                error.set('reopen',false);
+                        }
+
                         defered.resolve(error);
                     }
                 });

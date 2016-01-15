@@ -12,6 +12,7 @@ angular.module('marinetApp')
             $scope.error = Errors.get($scope.hash, $scope.name, function (error) {
                 $scope.solved = error.solved;
                 $scope.ignore = error.ignore;
+                $scope.reopen = error.reopen;
             });
 
             $scope.solve = function () {
@@ -32,8 +33,10 @@ angular.module('marinetApp')
                 Errors.getById($scope.hash, id, function (result) {
                     result.others = $scope.error.others;
                     result.selected = id;
-                    $scope.solved = result.solved;
                     $scope.error = result;
+                    $scope.reopen = result.reopen;
+                    $scope.solved = result.solved;
+
                 }, function (err) {
                     console.log(err);
                 });
