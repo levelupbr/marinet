@@ -32,7 +32,7 @@ module.exports = function (Models, Q) {
                             else
                                 error.set('reopen',false);                                                        
                         }else{
-                            if(!error.autoClosed && !error.solved)
+                            if(error.occurrences.length > 0 && !error.solved)  
                                 error.set('reopen',true);
                             else
                                 error.set('reopen',false);
