@@ -36,7 +36,7 @@ module.exports = function (Models, Q) {
 
                 
                 // Create/Update error by user (aka: hardwareid)
-                occurrence = new Date();
+                let occurrence = new Date();
                 Models.Error.findOne({hash: hash, hardwareId: data.hardwareId}).exec(function(err, error){
                     if (err) 
                         return defered.reject(err);
